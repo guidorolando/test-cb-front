@@ -6,7 +6,7 @@ User interface and logic of game of CRYPTO BETS:
 * A game execute when 2 o more players are registered
 * Open a notification popup with email of winner of a game
 
-###Pre condition
+### Pre condition
 * Running backend and notification (https://github.com/guidorolando/test-cb-back, https://github.com/guidorolando/test-cb-notification)
 
 # Getting Started
@@ -27,6 +27,6 @@ Run Angular project:
 
         ng serve
 
-#SHOW APPLICATION
+# SHOW APPLICATION
 
     http://localhost:4200/game
