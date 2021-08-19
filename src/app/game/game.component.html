@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="card-wrapper">
+        <mat-card class="example-card">
+            <mat-card-header>
+                <mat-card-title>CRYPTO BETS</mat-card-title>
+                <mat-card-subtitle>Status : {{state}}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-grid-list cols="5" rowHeight="200px">
+                    <mat-grid-tile [colspan]="4" [rowspan]="1">
+                        <h2>BTC {{game.initialValue}}</h2>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="1" [rowspan]="1">
+                        <app-timer [time]="time"></app-timer>
+                    </mat-grid-tile>
+
+                    <mat-grid-tile [colspan]="3" [rowspan]="1">
+                        <form [formGroup]="form" (submit)="sendBet()">
+
+                            <div class="example-container">
+                                <mat-form-field appearance="fill">
+                                    <mat-label>Enter your Email</mat-label>
+                                    <input matInput formControlName='email' name="email" type="email">
+                                </mat-form-field>
+
+                                <mat-form-field appearance="fill" floatLabel="always">
+                                    <mat-label>Bet</mat-label>
+                                    <input matInput formControlName='betValue' name="betValue">
+                                    <span matPrefix>$&nbsp;</span>
+                                </mat-form-field>
+                            </div>
+                            <button *ngIf="!betSent" mat-raised-button color="primary" type="submit"
+                                [disabled]="disabledButton()">Send
+                                bet</button>
+                        </form>
+                    </mat-grid-tile>
+                    <mat-grid-tile [colspan]="2" [rowspan]="1">
+                        <mat-list>
+                            <mat-list-item>Players</mat-list-item>
+                            <mat-list-item *ngFor="let player of players">{{player}}</mat-list-item>
+                        </mat-list>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+            </mat-card-content>
+            <mat-card-actions>
+
+            </mat-card-actions>
+        </mat-card>
+    </div>
+</div>
