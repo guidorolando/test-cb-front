@@ -11,9 +11,9 @@ export class PlayService {
   constructor(private http: HttpClient) { }
 
 
-  bet(registryGame: RegistryGame): Observable<RegistryGame> {
+  bet(registryGame: RegistryGame): Observable<boolean> {
     const url = this.getUrl();
-    return this.http.post<RegistryGame>(url, registryGame).pipe(
+    return this.http.post<boolean>(url, registryGame).pipe(
 
     );
 

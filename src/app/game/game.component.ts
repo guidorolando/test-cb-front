@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { StompState } from '@stomp/ng2-stompjs';
 import { Message } from 'stompjs';
 import { defaultGame, Game } from '../model/game.model';
@@ -27,12 +28,14 @@ export class GameComponent implements OnInit {
   state: string = 'NOT CONNECTED';
   time: number = 0;
   game: Game = defaultGame;
+  betSent: boolean = false;
 
   form: FormGroup;
 
   constructor(
     private gameService: GameService,
-    private playService: PlayService
+    private playService: PlayService,
+    private _snackBar: MatSnackBar
   ) { 
 
     this.getGame();
@@ -43,8 +46,12 @@ export class GameComponent implements OnInit {
 
     this.broadcastService = new WebsocketService(WS_URL, BRODCAST_URL);
     this.broadcastService.stream().subscribe((message: Message) => {
-      /* const dateNow = new Date();
-      this.time = Math.floor((Number(message.body) - dateNow.getTime())/1000); */
+      console.log('111111111111111');
+      console.log(message.body);
+      const json = JSON.parse(message.body);
+      if(json.length > 0) {
+        this.openSnackBar(json, 'close')
+      }
       this.getGame();
     });
     this.broadcastService.state().subscribe((state: StompState) => {
@@ -65,18 +72,18 @@ export class GameComponent implements OnInit {
 
   sendBet() {
     if(this.form.valid) {
-      console.log(this.form.value);
       const playRequest = {
         gameId: this.game.id,
         betValue: this.form.value.betValue,
         email: this.form.value.email
       };
       this.playService.bet(playRequest).subscribe(response => {
-        this.sendAction(playRequest);
+        if(response) {
+          this.sendAction(playRequest);
+          this.betSent = true;
+        }
       });
-      
     }
-  
   }
 
   sendAction(registryGame: RegistryGame) {
@@ -117,7 +124,15 @@ export class GameComponent implements OnInit {
       this.game = response;
       const dateNow = new Date();
       this.time = Math.floor((response.endTime - dateNow.getTime())/ 1000);
+      this.players = [];
+      this.betSent = false;
     })
+  }
+
+  openSnackBar(message: any[], action: string) {
+    const winners = message.map(item => item.email);
+    const joinWinners = winners.join(',')
+    this._snackBar.open('WINNERS: ' + joinWinners, action, {verticalPosition: 'top'});
   }
 
 }
