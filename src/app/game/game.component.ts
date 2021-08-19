@@ -3,6 +3,7 @@ import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { StompState } from '@stomp/ng2-stompjs';
+import { environment } from 'src/environments/environment';
 import { Message } from 'stompjs';
 import { defaultGame, Game } from '../model/game.model';
 import { RegistryGame } from '../model/registry-game.model';
@@ -11,7 +12,7 @@ import { PlayService } from '../service/play.service';
 import { WebsocketService } from '../ws/websocket.service';
 
 
-const WS_URL = 'ws://localhost:8088/socket';
+const WS_URL = environment.webSocketUrl;
 const BRODCAST_URL = '/topic/server-broadcaster';
 const UPDATE_GAME_STATUS_URL = '/topic/players';
 
@@ -46,8 +47,6 @@ export class GameComponent implements OnInit {
 
     this.broadcastService = new WebsocketService(WS_URL, BRODCAST_URL);
     this.broadcastService.stream().subscribe((message: Message) => {
-      console.log('111111111111111');
-      console.log(message.body);
       const json = JSON.parse(message.body);
       if(json.length > 0) {
         this.openSnackBar(json, 'close')

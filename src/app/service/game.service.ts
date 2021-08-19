@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {HttpClient} from "@angular/common/http";
 import { Game } from '../model/game.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,6 @@ export class GameService {
   
 
   getUrl(): string {
-    return 'http://localhost:8088/game/start';
+    return environment.backendUrl + '/game/start';
   }
 }
